@@ -1,0 +1,21 @@
+data <- read.csv("E:/SHLD/NPP data/NPP data/NPP/normalized_dataset.csv")
+# Extract the NPP column
+npp <- data$NPP
+
+# Check for missing values
+if (any(is.na(npp))) {
+  # Handle missing values by imputing them with the mean
+  npp[is.na(npp)] <- mean(npp, na.rm = TRUE)
+}
+
+# Perform Min-Max normalization
+min_npp <- min(npp)
+max_npp <- max(npp)
+normalized_npp <- (npp - min_npp) / (max_npp - min_npp)
+
+# Replace the NPP column with the normalized values
+data$NPP <- normalized_npp
+
+# Save the normalized dataset
+write.csv(data, file = "E:/SHLD/NPP data/NPP data/NPP/imputed_datset_1.csv", 
+          row.names = FALSE)
