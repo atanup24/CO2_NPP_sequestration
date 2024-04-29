@@ -1,0 +1,22 @@
+library(mice)
+
+# Load your dataset
+data <- read.csv("E:/SHLD/GLODAP/GLODAPv2_monthly_average_dataset.csv")
+
+# Select columns for imputation
+cols_to_impute <- c("G2temperature", "G2salinity", "G2phts25p0", "G2oxygen", 
+                    "G2nitrate", "G2nitrite", "G2silicate", "G2phosphate", 
+                    "G2tco2", "G2talk", "G2fco2", "G2toc", "G2doc", "G2don")
+
+# Perform multiple imputation using PMM only for selected columns
+imp <- mice(data[, cols_to_impute], method = "pmm")
+
+# Generate completed datasets
+completed_data <- complete(imp)
+
+# Merge imputed columns with the original dataset
+data[, cols_to_impute] <- completed_data
+
+# Check if missing values are filled
+colSums(is.na(data))
+write.csv(data, "E:/SHLD/GLODAP/completed_data_with_imputation.csv", row.names = FALSE)
